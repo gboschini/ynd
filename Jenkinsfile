@@ -7,6 +7,7 @@ pipeline {
     stage('Create Environment') {
       steps {
         sh("cp .env.example .env")
+        sh("docker -v")
       }
     }
     stage('Development build & Syntax Check') {
