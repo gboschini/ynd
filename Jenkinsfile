@@ -3,39 +3,37 @@ pipeline {
     label "jenkins-maven"
   }
 
-  
-  stages {
-    stage('Checkout') {
-      echo "Checkout"
-      checkout scm
-    }
+  stage('Checkout') {
+    echo "Checkout"
+    checkout scm
+  }
 
-    def tag = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
+  def tag = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
 
-    stage('Development build & Syntax Check') {
-      sh("cp .env.example .env")
-      sh("/usr/local/bin/docker-compose build")
-      sh("/usr/local/bin/docker-compose run --rm app mix do deps.get, compile, credo --strict")
-    }
-        
-    stage('Validate Environment') {
-      steps {
-        container('maven') {
-          echo "step container maven"
-        }
-      }
-    }
-    stage('Update Environment') {
-      when {
-        branch 'develop'
-      }
-      steps {
-        container('maven') {
-          echo "stage Update environment: step container maven"
-        }
+  stage('Development build & Syntax Check') {
+    sh("cp .env.example .env")
+    sh("/usr/local/bin/docker-compose build")
+    sh("/usr/local/bin/docker-compose run --rm app mix do deps.get, compile, credo --strict")
+  }
+
+  stage('Validate Environment') {
+    steps {
+      container('maven') {
+        echo "step container maven"
       }
     }
   }
+  stage('Update Environment') {
+    when {
+      branch 'develop'
+    }
+    steps {
+      container('maven') {
+        echo "stage Update environment: step container maven"
+      }
+    }
+  }
+
 }
 /*
 node ("jenkins-slave") {
