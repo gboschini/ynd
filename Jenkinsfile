@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   stages {
-    stage('Update Environment') {
+    stage('Create Environment') {
       steps {
         sh("cp .env.example .env")
       }
