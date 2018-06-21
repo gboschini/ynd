@@ -1,30 +1,6 @@
-pipeline {
-  agent {
-    label "jenkins-maven"
-  }
-
-
-  stages {
-    stage('Validate Environment') {
-      steps {
-        def tag = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
-        echo "this is the tag ${tag}";
-        container('maven') {
-          echo "step container maven"
-        }
-      }
-    }
-    stage('Update Environment') {
-      when {
-        branch 'develop'
-      }
-      steps {
-        container('maven') {
-          echo "stage Update environment step container maven"
-        }
-      }
-    }
-  }
+node {
+  def tag = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
+  echo "this is the tag ${tag}"
 }
 /*
 node ("jenkins-slave") {
