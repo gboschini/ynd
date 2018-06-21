@@ -1,3 +1,31 @@
+pipeline {
+  agent {
+    label "jenkins-maven"
+  }
+
+  
+  stages {
+    stage('Validate Environment') {
+      steps {
+        container('maven') {
+          echo "step container maven"
+        }
+      }
+    }
+    stage('Update Environment') {
+      echo "stage Update environment"
+      when {
+        branch 'develop'
+      }
+      steps {
+        container('maven') {
+          echo "stage Update environment: step container maven"
+        }
+      }
+    }
+  }
+}
+/*
 node ("jenkins-slave") {
 
   //update variables bellow
@@ -78,3 +106,4 @@ node ("jenkins-slave") {
 def isOnDevelop() {
   return !env.BRANCH_NAME || env.BRANCH_NAME == "develop";
 }
+*/
