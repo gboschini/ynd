@@ -13,7 +13,6 @@ pipeline {
       }
     }
     stage('Update Environment') {
-      echo "stage Update environment"
       when {
         branch 'develop'
       }
