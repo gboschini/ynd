@@ -2,7 +2,7 @@ node ("jenkins-slave") {
 
   //update variables bellow
   //meaningful app name
-  def app_name = "ynd_phx_bootstrap_app"
+  def app_name = "ynd"
 
   def registry_url
   def registry_creds
@@ -26,24 +26,7 @@ node ("jenkins-slave") {
     dcos_dr_tag = TAG
   }
 
-  //marathon url
-  withCredentials([[$class: 'StringBinding', credentialsId: 'YND_PHX_MARATHON_URL', variable: 'MARATHON_URL']]) {
-    marathon_url = MARATHON_URL
-  }
-
-
-  //marathon app id
-  withCredentials([[$class: 'StringBinding', credentialsId: 'YND_PHX_MARATHON_ID', variable: 'MARATHON_ID']]) {
-    marathon_id = MARATHON_ID
-  }
-
-  //marathon credentials
-  withCredentials([[$class: 'StringBinding', credentialsId: 'YND_PHX_DCOS_CREDS', variable: 'DCOS_CREDS']]) {
-    dcos_creds = DCOS_CREDS
-  }
-
   def deployment_result = "STARTED"
-  def marathon_json = "marathon.json"
 
   stage('Checkout') {
     echo "Checkout"
@@ -71,26 +54,19 @@ node ("jenkins-slave") {
 
   if(isOnDevelop()) {
     stage("Setup marathon files") {
-      withCredentials([file(credentialsId: 'YND_PHX_MARATHON_JSON', variable: 'MARATHON_JSON')]) {
-        withCredentials([file(credentialsId: 'YND_PHX_MARATHON_DB_JSON', variable: 'MARATHON_DB_JSON')]) {
-          sh("cp \"$MARATHON_JSON\" ./marathon.json")
-          sh("cp \"$MARATHON_DB_JSON\" ./marathon-db.json")
-        }
-      }
+      echo "Stage Setup marathon files"
     }
 
     stage("Production build") {
-      image = docker.build("${app_name}:${tag}", "-f rel/Dockerfile .")
+      echo "Stage Production build"
     }
 
     stage("Promote") {
-      docker.withRegistry("${registry_url}","${registry_creds}") {
-        image.push("${tag}")
-      }
+      echo "Stage Promote"
     }
 
     stage("Deployment") {
-      marathon credentialsId: "${dcos_creds}", docker: "${dcos_dr_tag}/${app_name}:${tag}", filename: "${marathon_json}", forceUpdate: true, id: "${marathon_id}", url: "${marathon_url}"
+      echo "Stage Deployment"
     }
   }
 
