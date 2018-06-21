@@ -1,5 +1,7 @@
 pipeline {
-  agent any
+  agent {
+    label "jenkins-maven"
+  }
 
   stages {
     stage('Create Environment') {
