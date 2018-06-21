@@ -3,11 +3,11 @@ pipeline {
     label "jenkins-maven"
   }
 
-  def tag = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
 
   stages {
     stage('Validate Environment') {
       steps {
+        def tag = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
         echo "this is the tag ${tag}";
         container('maven') {
           echo "step container maven"
