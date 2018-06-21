@@ -4,11 +4,11 @@ pipeline {
   }
 
   def tag = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
-  echo tag
-  
+
   stages {
     stage('Validate Environment') {
       steps {
+        echo "this is the tag ${tag}";
         container('maven') {
           echo "step container maven"
         }
