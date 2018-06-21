@@ -1,6 +1,27 @@
-node {
-  def tag = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
-  echo "this is the tag ${tag}"
+pipeline {
+  agent any
+
+  stages {
+    stage('Update Environment') {
+      steps {
+        sh("cp .env.example .env")
+      }
+    }
+    stage('Development build & Syntax Check') {
+      steps {
+        sh("/usr/local/bin/docker-compose build")
+        sh("/usr/local/bin/docker-compose run --rm app mix do deps.get, compile, credo --strict")
+      }
+    }    
+    stage('Update Environment') {
+      when {
+        branch 'develop'
+      }
+      steps {
+          echo "stage Update environment step container maven"
+      }
+    }
+  }
 }
 /*
 node ("jenkins-slave") {
