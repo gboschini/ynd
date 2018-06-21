@@ -3,6 +3,8 @@ pipeline {
     label "jenkins-maven"
   }
 
+  def tag = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
+  echo tag
   
   stages {
     stage('Validate Environment') {
