@@ -8,10 +8,10 @@ config :logger, level: :warn
 
 config :ynd_phx_bootstrap, YndPhxBootstrap.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "ynd_phx_bootstrap",
-  password: "ynd_phx_bootstrap",
-  database: "ynd_phx_bootstrap_test",
-  hostname: "postgres",
+  username: "postgres",
+  password: "",
+  database: "ynd",
+  hostname: "localhost",
   port: 5432,
   pool: Ecto.Adapters.SQL.Sandbox
 
