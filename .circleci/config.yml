@@ -12,8 +12,18 @@ jobs:
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
       - image: circleci/postgres:9.6
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: ynd
 
     working_directory: ~/repo
+
+    environment:
+      DB_HOST: "localhost"
+      DB_USERNAME: "postgres"
+      DB_PASSWORD: ""
+      DB_NAME: "ynd"
+
     steps:
       - checkout
       - run: mix local.rebar --force && mix local.hex --force && mix archive.install https://github.com/phoenixframework/archives/raw/master/phx_new.ez --force
