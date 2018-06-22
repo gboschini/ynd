@@ -13,9 +13,9 @@ config :phoenix, :stacktrace_depth, 20
 
 config :ynd_phx_bootstrap, YndPhxBootstrap.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "${DB_USERNAME}",
-  password: "${DB_PASSWORD}",
-  database: "${DB_NAME}",
-  hostname: "${DB_HOST}",
+  username: "postgres",
+  password: "",
+  database: "ynd",
+  hostname: "localhost",
   port: 5432,
   pool_size: 10
