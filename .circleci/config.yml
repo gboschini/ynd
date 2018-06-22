@@ -17,6 +17,37 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          name: Waiting for Postgres to be ready
+          command: |
+            for i in `seq 1 10`;
+            do
+              nc -z localhost 5432 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for Postgress && exit 1
+
+      # This should go into custom primary image, here's only for the sake of explanation
+      - run:
+          name: Install Docker Compose
+          command: |
+            set -x
+            curl -L https://github.com/docker/compose/releases/download/1.11.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+            chmod +x /usr/local/bin/docker-compose
+
+      - run:
+          name: Start container and verify it's working
+          command: |
+            set -x
+            docker-compose build
+
+      - run:
+          name: Start container and verify it's working
+          command: |
+            set -x
+            docker-compose run mix deps.get
+
       # specify any bash command here prefixed with `run: `
       - run: mix deps.get
       - run: mix ecto.create
